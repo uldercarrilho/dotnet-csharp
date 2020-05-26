@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Statements.Selection_Statements
+namespace Statements.Selection
 {
     public abstract class Shape
     {
