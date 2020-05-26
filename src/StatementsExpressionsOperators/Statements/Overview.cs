@@ -87,17 +87,6 @@ namespace Statements
 {
     public class Overview
     {
-        public static void Run()
-        {
-            DeclarationStatements();
-            ExpressionStatements();
-            EmptyStatement1();
-            EmptyStatement2();
-            EmbeddedStatements();
-            NestedStatementBlocks();
-            UnreachableStatements();
-        }
-
         private static void DeclarationStatements()
         {
             // Variable declaration statements.
