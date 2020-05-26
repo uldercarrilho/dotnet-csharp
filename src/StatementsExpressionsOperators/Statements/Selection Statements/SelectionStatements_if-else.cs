@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StatementKeywords
+namespace Statements.Selection_Statements
 {
     public class SelectionStatements_if_else
     {
