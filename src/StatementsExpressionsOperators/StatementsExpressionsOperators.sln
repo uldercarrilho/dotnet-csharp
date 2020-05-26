@@ -1,8 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Statements", "Statements\Statements.csproj", "{C270A52F-C420-4839-AC80-11DC70014BFD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C270A52F-C420-4839-AC80-11DC70014BFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C270A52F-C420-4839-AC80-11DC70014BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C270A52F-C420-4839-AC80-11DC70014BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C270A52F-C420-4839-AC80-11DC70014BFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
