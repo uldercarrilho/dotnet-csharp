@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Statements", "Statements\St
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expressions", "Expressions\Expressions.csproj", "{9F83C1BF-334B-48C1-B500-6E19188BBB18}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnonymousFunctions", "AnonymousFunctions\AnonymousFunctions.csproj", "{58ECF1DB-8E3C-4C93-9E07-ABF7495D63D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{9F83C1BF-334B-48C1-B500-6E19188BBB18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F83C1BF-334B-48C1-B500-6E19188BBB18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F83C1BF-334B-48C1-B500-6E19188BBB18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58ECF1DB-8E3C-4C93-9E07-ABF7495D63D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58ECF1DB-8E3C-4C93-9E07-ABF7495D63D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58ECF1DB-8E3C-4C93-9E07-ABF7495D63D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58ECF1DB-8E3C-4C93-9E07-ABF7495D63D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
