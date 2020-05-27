@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expressions", "Expressions\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnonymousFunctions", "AnonymousFunctions\AnonymousFunctions.csproj", "{58ECF1DB-8E3C-4C93-9E07-ABF7495D63D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EqualityComparisons", "EqualityComparisons\EqualityComparisons.csproj", "{286383D3-BD39-42B0-AC69-2FF05A97F3D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{58ECF1DB-8E3C-4C93-9E07-ABF7495D63D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58ECF1DB-8E3C-4C93-9E07-ABF7495D63D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58ECF1DB-8E3C-4C93-9E07-ABF7495D63D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{286383D3-BD39-42B0-AC69-2FF05A97F3D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{286383D3-BD39-42B0-AC69-2FF05A97F3D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{286383D3-BD39-42B0-AC69-2FF05A97F3D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{286383D3-BD39-42B0-AC69-2FF05A97F3D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
