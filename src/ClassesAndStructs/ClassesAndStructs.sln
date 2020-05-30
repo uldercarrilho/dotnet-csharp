@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Overview", "Overview\Overvi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Polymorphism", "Polymorphism\Polymorphism.csproj", "{40E92F40-AA4C-4138-9FEE-F1B6A6491E31}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Members", "Members\Members.csproj", "{0714BB35-37A1-4F65-AED3-3208501378DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{40E92F40-AA4C-4138-9FEE-F1B6A6491E31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40E92F40-AA4C-4138-9FEE-F1B6A6491E31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40E92F40-AA4C-4138-9FEE-F1B6A6491E31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0714BB35-37A1-4F65-AED3-3208501378DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0714BB35-37A1-4F65-AED3-3208501378DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0714BB35-37A1-4F65-AED3-3208501378DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0714BB35-37A1-4F65-AED3-3208501378DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
