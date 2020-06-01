@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Constructors", "Constructor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Finalizers", "Finalizers\Finalizers.csproj", "{512DE272-9156-4A31-9B55-140F3266C2EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Initializers", "Initializers\Initializers.csproj", "{9B95F30B-1C16-41CB-A535-095617093B5E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +50,9 @@ Global
 		{512DE272-9156-4A31-9B55-140F3266C2EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{512DE272-9156-4A31-9B55-140F3266C2EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{512DE272-9156-4A31-9B55-140F3266C2EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B95F30B-1C16-41CB-A535-095617093B5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B95F30B-1C16-41CB-A535-095617093B5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B95F30B-1C16-41CB-A535-095617093B5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B95F30B-1C16-41CB-A535-095617093B5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
