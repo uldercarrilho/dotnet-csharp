@@ -95,11 +95,43 @@ namespace Overview
     // Because structs are value types, a variable of a struct object holds a copy of the entire object.
     // Instances of structs can also be created by using the new operator, but this is not required.
     
+    // A type defined within a class, struct, or interface is called a nested type. 
+    public class Container1
+    {
+        class Nested1
+        {
+            Nested1() { }
+        }
+    }
+    
+    // Regardless of whether the outer type is a class, interface, or struct, nested types default to private;
+    // they are accessible only from their containing type.
+    
+    // You can also specify an access modifier to define the accessibility of a nested type, as follows:
+    //     Nested types of a class can be public, protected, internal, protected internal, private or private protected.
+    //     However, defining a protected, protected internal or private protected nested class inside a sealed class generates compiler warning CS0628
+    //     Nested types of a struct can be public, internal, or private.
+    
+    // The nested, or inner, type can access the containing, or outer, type.
+    // To access the containing type, pass it as an argument to the constructor of the nested type.
+    public class Container
+    {
+        public class Nested
+        {
+            private Container parent;
+            public Nested() { }
+            public Nested(Container parent) => this.parent = parent;
+        }
+    }
+
+    // A nested type has access to all of the members that are accessible to its containing type.
+    // It can access private and protected members of the containing type, including any inherited protected members.
+
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Container.Nested nest = new Container.Nested();
         }
     }
 }
