@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnsafeProject", "UnsafeProject\UnsafeProject.csproj", "{8FB75BD6-A8B5-4E71-95E2-FC0022A5ADFA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8FB75BD6-A8B5-4E71-95E2-FC0022A5ADFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FB75BD6-A8B5-4E71-95E2-FC0022A5ADFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FB75BD6-A8B5-4E71-95E2-FC0022A5ADFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FB75BD6-A8B5-4E71-95E2-FC0022A5ADFA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
