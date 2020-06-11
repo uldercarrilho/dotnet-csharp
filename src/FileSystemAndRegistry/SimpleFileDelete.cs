@@ -17,6 +17,8 @@ public class SimpleFileDelete
 
     public static void Run()
     {
+        Console.WriteLine("\nRunning SimpleFileDelete");
+
         Initialize();
 
         // Delete a file by using File class static method...

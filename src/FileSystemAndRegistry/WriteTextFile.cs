@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 class WriteTextFile
@@ -11,6 +12,8 @@ class WriteTextFile
 
     public static void Run()
     {
+        Console.WriteLine("\nRunning WriteTextFile");
+
         Initialize();
 
         // Example #1: Write an array of strings to a file.

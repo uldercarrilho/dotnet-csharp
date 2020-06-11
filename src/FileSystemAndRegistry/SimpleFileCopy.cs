@@ -16,6 +16,8 @@ public class SimpleFileCopy
 
     public static void Run()
     {
+        Console.WriteLine("\nRunning SimpleFileCopy");
+
         Initialize();
 
         string fileName = "test.txt";

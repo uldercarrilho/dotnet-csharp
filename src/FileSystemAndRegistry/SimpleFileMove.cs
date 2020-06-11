@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 public class SimpleFileMove
@@ -14,6 +15,8 @@ public class SimpleFileMove
 
     public static void Run()
     {
+        Console.WriteLine("\nRunning SimpleFileMove");
+
         Initialize();
 
         string sourceFile = @"C:\Users\Public\public\test.txt";
