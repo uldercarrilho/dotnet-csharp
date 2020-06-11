@@ -45,6 +45,9 @@ namespace FileSystemAndRegistry
             WriteTextFile.Run();
             // How to read from a text file
             ReadFromFile.Run();
+
+            // How to create a key in the registry
+            RegistryTest.Run();
         }
     }
 }
