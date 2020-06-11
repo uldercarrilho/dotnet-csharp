@@ -31,6 +31,15 @@ namespace FileSystemAndRegistry
 
             // How to create a file or folder
             CreateFileOrFolder.Run();
+
+            // How to copy, delete, and move files and folders
+            // Use System.IO.FileSystemWatcher to provide events that will enable you to calculate the progress when 
+            // operating on multiple files. Another approach is to use platform invoke to call the relevant file-related 
+            // methods in the Windows Shell. For information about how to perform these file operations asynchronously, 
+            // see Asynchronous File I/O.
+            SimpleFileCopy.Run();
+            SimpleFileMove.Run();
+            SimpleFileDelete.Run();
         }
     }
 }
