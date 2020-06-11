@@ -40,6 +40,9 @@ namespace FileSystemAndRegistry
             SimpleFileCopy.Run();
             SimpleFileMove.Run();
             SimpleFileDelete.Run();
+
+            // How to write to a text file
+            WriteTextFile.Run();
         }
     }
 }
