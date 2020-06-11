@@ -43,6 +43,8 @@ namespace FileSystemAndRegistry
 
             // How to write to a text file
             WriteTextFile.Run();
+            // How to read from a text file
+            ReadFromFile.Run();
         }
     }
 }
