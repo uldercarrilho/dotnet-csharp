@@ -8,7 +8,7 @@ namespace FileSystemAndRegistry
         {
             // How to iterate through a directory tree
             RecursiveFileSearch.Run();
-            StackBasedIteration.Run("C:/SAC");
+            StackBasedIteration.Run(@"C:\SAJ");
 
             // How to get information about files, folders, and drives
             FileSysInfo.Run();
@@ -28,6 +28,9 @@ namespace FileSystemAndRegistry
 
             // The System.IO.Directory and System.IO.File classes provide static methods for retrieving information about 
             // directories and files.
+
+            // How to create a file or folder
+            CreateFileOrFolder.Run();
         }
     }
 }
