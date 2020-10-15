@@ -45,7 +45,6 @@ namespace ConsoleApp
             // The program name can include path information, but is not required to do so.
             Console.Out.WriteLine("\nRead command-line from Environment");
             Console.Out.WriteLine(Environment.CommandLine);
-            ;
         }
 
         // The following is a list of valid Main signatures:
