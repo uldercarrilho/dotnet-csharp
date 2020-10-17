@@ -47,7 +47,7 @@ namespace Statements.Iteration
             int d = 0;
             int outside;
             List<int> numbers;
-            for (outside = 0, InvocationMethod(), ++a, b++, --c, d++, numbers = new List<int>(), await Initialization(); true; )
+            for (outside = 0, InvocationMethod(), ++a, b++, --c, d--, numbers = new List<int>(), await Initialization(); true; )
             {
                 Console.Out.WriteLine("Initialization Section");
                 break;
@@ -96,7 +96,7 @@ namespace Statements.Iteration
             int d = 0;
             int outside;
             List<int> numbers;
-            for ( ; ; outside = 0, InvocationMethod(), ++a, b++, --c, d++, numbers = new List<int>(), await Initialization())
+            for ( ; ; outside = 0, InvocationMethod(), ++a, b++, --c, d--, numbers = new List<int>(), await Initialization())
             {
                 Console.Out.WriteLine("Initialization Section");
                 if (a == 1) break;
