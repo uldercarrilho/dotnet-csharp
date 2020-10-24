@@ -54,6 +54,11 @@ namespace Finalizers
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
+            Destroyer obj = new Destroyer();
+            Console.WriteLine("Object name is " + obj);
+            obj = null;
+            System.GC.Collect();
+            Console.WriteLine("GC is runned");
         }
     }
 }

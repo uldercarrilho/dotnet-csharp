@@ -200,7 +200,7 @@ namespace Methods
             if (start < 0 || start > 99)
                 throw new ArgumentOutOfRangeException("start must be between 0 and 99.");
             if (end > 100)
-                throw new ArgumentOutOfRangeException("end must be less than or equal to 100."); //Line 22
+                throw new ArgumentOutOfRangeException("end must be less than or equal to 100.");
             if (start >= end)
                 throw new ArgumentException("start must be less than end.");
 
@@ -233,7 +233,7 @@ namespace Methods
         static Task<int> GetMultiple(int secondsDelay)
         {
             if (secondsDelay < 0 || secondsDelay > 5)
-                throw new ArgumentOutOfRangeException("secondsDelay cannot exceed 5."); // Line 15
+                throw new ArgumentOutOfRangeException("secondsDelay cannot exceed 5.");
 
             return GetValueAsync();
 
@@ -297,9 +297,9 @@ namespace Methods
         static void Example5()
         {
             int[] arr = {1, 4, 5};
-            Console.WriteLine("Inside Main, before calling the method, the first element is: {0}", arr [0]);
+            Console.WriteLine("Inside Main, before calling the method, the first element is: {0}", arr[0]);
             Change(arr);
-            Console.WriteLine("Inside Main, after calling the method, the first element is: {0}", arr [0]);
+            Console.WriteLine("Inside Main, after calling the method, the first element is: {0}", arr[0]);
             // Output
             // Inside Main, before calling the method, the first element is: 1
             // Inside the method, the first element is: -3

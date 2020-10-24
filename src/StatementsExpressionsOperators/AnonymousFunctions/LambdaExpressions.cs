@@ -68,7 +68,8 @@ namespace AnonymousFunctions
             
             // A statement lambda resembles an expression lambda except that the statement(s) is enclosed in braces:
             // (input-parameters) => { <sequence-of-statements> }
-            // The body of a statement lambda can consist of any number of statements; however, in practice there are typically no more than two or three.
+            // The body of a statement lambda can consist of any number of statements;
+            // however, in practice there are typically no more than two or three.
 
             Action<string> greet = name =>
             {

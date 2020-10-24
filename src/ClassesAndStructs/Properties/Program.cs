@@ -168,11 +168,7 @@ namespace Properties
     
     abstract class Shape
     {
-        public abstract double Area
-        {
-            get;
-            set;
-        }
+        public abstract double Area { get; set; }
     }
 
     class Square : Shape
