@@ -11,7 +11,7 @@ namespace GenericsProject
 
     // When an interface is specified as a constraint on a type parameter, only types that implement the interface can be used.
 
-    //Type parameter T in angle brackets.
+    // Type parameter T in angle brackets.
     public class GenericList3<T> : IEnumerable<T>
     {
         protected Node head;
@@ -21,9 +21,9 @@ namespace GenericsProject
         protected class Node
         {
             public Node next;
-            private T data;  //T as private member datatype
+            private T data;  // T as private member datatype
 
-            // //T used in non-generic constructor
+            // T used in non-generic constructor
             public Node(T t) => (next, data) = (null, t); 
 
             public Node Next
@@ -32,7 +32,7 @@ namespace GenericsProject
                 set { next = value; }
             }
 
-            public T Data  //T as return type of property
+            public T Data  // T as return type of property
             {
                 get { return data; }
                 set { data = value; }
@@ -64,7 +64,8 @@ namespace GenericsProject
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
-    public class SortedList<T> : GenericList3<T> where T : System.IComparable<T>
+    public class SortedList<T> : GenericList3<T> 
+        where T : System.IComparable<T>
     {
         // A simple, unoptimized sort algorithm that orders list elements from lowest to highest:
         public void BubbleSort()
@@ -129,30 +130,30 @@ namespace GenericsProject
     {
         public static void Run()
         {
-            //Declare and instantiate a new generic SortedList class. Person is the type argument.
+            // Declare and instantiate a new generic SortedList class. Person is the type argument.
             SortedList<Person> list = new SortedList<Person>();
 
-            //Create name and age values to initialize Person objects.
+            // Create name and age values to initialize Person objects.
             string[] names = {"Franscoise", "Bill", "Li", "Sandra", "Gunnar", "Alok", "Hiroyuki", "Maria", "Alessandro", "Raul"};
             int[] ages = { 45, 19, 28, 23, 18, 9, 108, 72, 30, 35 };
 
-            //Populate the list.
+            // Populate the list.
             for (int x = 0; x < 10; x++)
             {
                 list.AddHead(new Person(names[x], ages[x]));
             }
 
-            //Print out unsorted list.
+            // Print out unsorted list.
             foreach (Person p in list)
             {
                 Console.WriteLine(p.ToString());
             }
             Console.WriteLine("Done with unsorted list");
 
-            //Sort the list.
+            // Sort the list.
             list.BubbleSort();
 
-            //Print out sorted list.
+            // Print out sorted list.
             foreach (Person p in list)
             {
                 Console.WriteLine(p.ToString());

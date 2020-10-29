@@ -162,10 +162,6 @@ namespace ExceptionsProject
 
         static void Example6()
         {
-           
-
-
-
         }
         
         // Programmers should throw exceptions when one or more of the following conditions are true:
@@ -191,8 +187,8 @@ namespace ExceptionsProject
     // An inappropriate call to an object is made, based on the object state.
     class ProgramLog
     {
-        System.IO.FileStream logFile = null;
-        void OpenLog(System.IO.FileInfo fileName, System.IO.FileMode mode) {}
+        FileStream logFile = null;
+        void OpenLog(FileInfo fileName, FileMode mode) {}
 
         void WriteLog()
         {

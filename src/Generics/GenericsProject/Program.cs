@@ -223,7 +223,8 @@ namespace GenericsProject
         // these operators will test for reference identity only, not for value equality. This behavior occurs even if
         // these operators are overloaded in a type that is used as an argument. The following code illustrates this point;
         // the output is false even though the String class overloads the == operator.
-        public static void OpEqualsTest<T>(T s, T t) where T : class
+        public static void OpEqualsTest<T>(T s, T t) 
+            where T : class
         {
             Console.WriteLine(s == t);
         }
@@ -267,7 +268,7 @@ namespace GenericsProject
     // In the previous example, T is a type constraint in the context of the Add method, and an unbounded type parameter
     // in the context of the List class. Type parameters can also be used as constraints in generic class definitions.
     // The type parameter must be declared within the angle brackets together with any other type parameters:
-    //Type parameter V is used as a type constraint.
+    // Type parameter V is used as a type constraint.
     public class SampleClass<T, U, V> where T : V { }
 
     // The usefulness of type parameters as constraints with generic classes is limited because the compiler can assume

@@ -55,7 +55,7 @@ namespace ArraysProject
             // A jagged array is an array whose elements are arrays.
             // A jagged array is an array of arrays, and therefore its elements are reference types and are initialized to null.
             // The elements of a jagged array can be of different dimensions and sizes.
-            // A jagged array is sometimes called an "array of arrays.
+            // A jagged array is sometimes called an "array of arrays".
             int[][] jaggedArray = new int[6][];
 
             // Set the values of the first array in the jagged array structure.
