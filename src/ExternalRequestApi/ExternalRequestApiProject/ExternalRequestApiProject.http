@@ -1,0 +1,32 @@
+@host = https://localhost:7288
+@hostHttp = http://localhost:5247
+
+### Reference — health check (works out of the box; no upstream call)
+GET {{host}}/external/health
+
+### Exercise 1 — list posts from JSONPlaceholder
+GET {{host}}/posts
+
+### Exercise 2 — get post by id
+GET {{host}}/posts/1
+###
+GET {{host}}/posts/99999
+
+### Exercise 3 — create a post (forwarded to external API)
+POST {{host}}/posts
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "title": "External request practice",
+  "body": "Posted via our proxy endpoint."
+}
+
+### Exercise 4 — posts for a user
+GET {{host}}/posts/user/1
+
+### Exercise 5 — aggregated summary (post + comment count)
+GET {{host}}/posts/1/summary
+
+### Exercise 6 — cancellable list (same route as Exercise 1 once implemented)
+GET {{host}}/posts
