@@ -1,5 +1,6 @@
 using CreateEndpointsProject.Models;
 using CreateEndpointsProject.Services;
+using Microsoft.VisualBasic;
 
 // =============================================================================
 // CREATE ENDPOINTS — Interview practice scaffold
@@ -33,7 +34,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<IBookRepository, BookRepository>();
 
 // Uncomment when working on Exercise 7 (controller-based endpoints):
-// builder.Services.AddControllers();
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -64,7 +65,7 @@ app.MapGet("/books/health", () => Results.Ok(new { status = "ready", topic = "cr
 // Interview tip: returning a raw List or array is fine; Results.Ok makes the status explicit.
 
 // TODO: Implement Exercise 1 here
-// app.MapGet(...);
+app.MapGet("/books", (IBookRepository repository) => Results.Ok(repository.GetAll()));
 
 
 // =============================================================================
@@ -83,7 +84,10 @@ app.MapGet("/books/health", () => Results.Ok(new { status = "ready", topic = "cr
 // Test: GET /books/1 (200) and GET /books/999 (404)
 
 // TODO: Implement Exercise 2 here
-// app.MapGet(...);
+app.MapGet("/books/{id:int}", (int id, IBookRepository repository) => {
+    var book = repository.GetById(id);
+    return book == null ? Results.NotFound() : Results.Ok(book);
+});
 
 
 // =============================================================================
@@ -106,7 +110,13 @@ app.MapGet("/books/health", () => Results.Ok(new { status = "ready", topic = "cr
 // Mention idempotency: POST is NOT idempotent (calling twice creates two resources).
 
 // TODO: Implement Exercise 3 here
-// app.MapPost(...);
+app.MapPost("/books", (CreateBookRequest request, IBookRepository repository) => {
+    if (string.IsNullOrWhiteSpace(request.Title))
+        return Results.BadRequest($"{nameof(request.Title)} is required.");
+
+    var book = repository.Add(request);
+    return Results.Created($"/books/{book.Id}", book);
+});
 
 
 // =============================================================================
@@ -124,7 +134,10 @@ app.MapGet("/books/health", () => Results.Ok(new { status = "ready", topic = "cr
 // This scaffold uses partial fields in UpdateBookRequest (PATCH-style) for flexibility.
 
 // TODO: Implement Exercise 4 here
-// app.MapPut(...);
+app.MapPut("/books/{id:int}", (int id, UpdateBookRequest request, IBookRepository repository) => {
+    var updated = repository.Update(id, request);
+    return updated == null ? Results.NotFound() : Results.Ok(updated);
+});
 
 
 // =============================================================================
@@ -140,7 +153,9 @@ app.MapGet("/books/health", () => Results.Ok(new { status = "ready", topic = "cr
 // Interview tip: 204 No Content is standard for successful DELETE. Some APIs return 200 with a message instead.
 
 // TODO: Implement Exercise 5 here
-// app.MapDelete(...);
+app.MapDelete("/books/{id:int}", (int id, IBookRepository repository) => {
+    return repository.Delete(id) ? Results.NoContent() : Results.NotFound();
+});
 
 
 // =============================================================================
@@ -162,13 +177,15 @@ app.MapGet("/books/health", () => Results.Ok(new { status = "ready", topic = "cr
 // Interview tip: query strings are for filtering/sorting/paging — not for identifying a single resource (use route params).
 
 // TODO: Implement Exercise 6 here
-// app.MapGet(...);
+app.MapGet("/books/search", (string? author, int? year, IBookRepository repository) => {
+    return Results.Ok(repository.Search(author, year));
+});
 
 
 // -----------------------------------------------------------------------------
 // EXERCISE 7 — see Controllers/BooksController.cs
 // -----------------------------------------------------------------------------
 // Uncomment when implementing controller-based endpoints:
-// app.MapControllers();
+app.MapControllers();
 
 app.Run();

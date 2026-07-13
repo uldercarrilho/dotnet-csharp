@@ -45,15 +45,16 @@ public class BooksController : ControllerBase
     [HttpGet]
     public ActionResult<IReadOnlyList<Book>> GetAll()
     {
-        throw new NotImplementedException("Exercise 7a: return Ok(_repository.GetAll())");
+        return Ok(_repository.GetAll());
     }
 
     // TODO: GET /api/books/{id}
     // Return 404 NotFound() when the book is missing, otherwise 200 OK with the book
     [HttpGet("{id:int}")]
-    public ActionResult<Book> GetById(int id)
+    public ActionResult<Book> GetById([FromRoute] int id)
     {
-        throw new NotImplementedException("Exercise 7b: look up by id and return appropriate status");
+        var book = _repository.GetById(id);
+        return book == null ? NotFound() : Ok(book);
     }
 
     // TODO: POST /api/books
@@ -62,7 +63,15 @@ public class BooksController : ControllerBase
     [HttpPost]
     public ActionResult<Book> Create([FromBody] CreateBookRequest request)
     {
-        throw new NotImplementedException("Exercise 7c: validate, add, return CreatedAtAction");
+        if (string.IsNullOrWhiteSpace(request.Title))
+            return BadRequest($"{nameof(request.Title)} is required.");
+
+        if (string.IsNullOrWhiteSpace(request.Author))
+            return BadRequest($"{nameof(request.Author)} is required.");
+
+        var book = _repository.Add(request);
+
+        return CreatedAtAction(nameof(Create), book);
     }
 
     // TODO: PUT /api/books/{id}
@@ -70,7 +79,8 @@ public class BooksController : ControllerBase
     [HttpPut("{id:int}")]
     public ActionResult<Book> Update(int id, [FromBody] UpdateBookRequest request)
     {
-        throw new NotImplementedException("Exercise 7d: update and return appropriate status");
+        var updated = _repository.Update(id, request);
+        return updated == null ? NotFound() : Ok(updated);
     }
 
     // TODO: DELETE /api/books/{id}
@@ -78,6 +88,6 @@ public class BooksController : ControllerBase
     [HttpDelete("{id:int}")]
     public IActionResult Delete(int id)
     {
-        throw new NotImplementedException("Exercise 7e: delete and return 204 or 404");
+        return _repository.Delete(id) ? NoContent() : NotFound();
     }
 }
