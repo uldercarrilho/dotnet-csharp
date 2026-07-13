@@ -1,0 +1,45 @@
+@host = https://localhost:7175
+@hostHttp = http://localhost:5203
+
+### Reference — health check (works out of the box)
+GET {{host}}/books/health
+
+### Exercise 1 — list all books
+GET {{host}}/books
+
+### Exercise 2 — get by id
+GET {{host}}/books/1
+###
+GET {{host}}/books/999
+
+### Exercise 3 — create a book
+POST {{host}}/books
+Content-Type: application/json
+
+{
+  "title": "Refactoring",
+  "author": "Martin Fowler",
+  "publishedYear": 1999
+}
+
+### Exercise 4 — update a book
+PUT {{host}}/books/1
+Content-Type: application/json
+
+{
+  "title": "The Pragmatic Programmer (20th Anniversary)",
+  "publishedYear": 2019
+}
+
+### Exercise 5 — delete a book
+DELETE {{host}}/books/3
+
+### Exercise 6 — search with query strings
+GET {{host}}/books/search?author=Martin
+###
+GET {{host}}/books/search?year=1999
+
+### Exercise 7 — controller routes (after enabling MapControllers)
+GET {{host}}/api/books
+###
+GET {{host}}/api/books/2
