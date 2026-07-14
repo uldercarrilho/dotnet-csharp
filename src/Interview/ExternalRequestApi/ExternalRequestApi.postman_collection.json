@@ -1,0 +1,182 @@
+{
+  "info": {
+    "name": "ExternalRequestApi",
+    "description": "Interview practice API — external requests to JSONPlaceholder.\n\nRun: `dotnet run --project src/Interview/ExternalRequestApi`\n\nCollection variables:\n- `host` — HTTPS (default https://localhost:7288)\n- `hostHttp` — HTTP (default http://localhost:5247)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "host",
+      "value": "https://localhost:7288",
+      "type": "string"
+    },
+    {
+      "key": "hostHttp",
+      "value": "http://localhost:5247",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Reference",
+      "item": [
+        {
+          "name": "Health check (works out of the box; no upstream call)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/external/health",
+              "host": ["{{host}}"],
+              "path": ["external", "health"]
+            },
+            "description": "Reference — health check (works out of the box; no upstream call)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exercise 1",
+      "item": [
+        {
+          "name": "List posts from JSONPlaceholder",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/posts",
+              "host": ["{{host}}"],
+              "path": ["posts"]
+            },
+            "description": "Exercise 1 — list posts from JSONPlaceholder"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exercise 2",
+      "item": [
+        {
+          "name": "Get post by id (existing)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/posts/1",
+              "host": ["{{host}}"],
+              "path": ["posts", "1"]
+            },
+            "description": "Exercise 2 — get post by id (expect 200)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get post by id (not found)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/posts/99999",
+              "host": ["{{host}}"],
+              "path": ["posts", "99999"]
+            },
+            "description": "Exercise 2 — get post by id (expect 404)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exercise 3",
+      "item": [
+        {
+          "name": "Create a post (forwarded to external API)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"title\": \"External request practice\",\n  \"body\": \"Posted via our proxy endpoint.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{host}}/posts",
+              "host": ["{{host}}"],
+              "path": ["posts"]
+            },
+            "description": "Exercise 3 — create a post (forwarded to external API)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exercise 4",
+      "item": [
+        {
+          "name": "Posts for a user",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/posts/user/1",
+              "host": ["{{host}}"],
+              "path": ["posts", "user", "1"]
+            },
+            "description": "Exercise 4 — posts for a user"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exercise 5",
+      "item": [
+        {
+          "name": "Aggregated summary (post + comment count)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/posts/1/summary",
+              "host": ["{{host}}"],
+              "path": ["posts", "1", "summary"]
+            },
+            "description": "Exercise 5 — aggregated summary (post + comment count)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exercise 6",
+      "item": [
+        {
+          "name": "Cancellable list (same route as Exercise 1 once implemented)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/posts",
+              "host": ["{{host}}"],
+              "path": ["posts"]
+            },
+            "description": "Exercise 6 — cancellable list (same route as Exercise 1 once implemented)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

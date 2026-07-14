@@ -15,6 +15,7 @@ public class JsonPlaceholderClient : IJsonPlaceholderClient
     {
         _httpClient = httpClient;
         _httpClient.BaseAddress = new Uri(options.Value.BaseUrl.TrimEnd('/') + "/");
+        _httpClient.Timeout = TimeSpan.FromSeconds(10);
     }
 
     public async Task<IReadOnlyList<ExternalPost>> GetPostsAsync(CancellationToken cancellationToken = default)

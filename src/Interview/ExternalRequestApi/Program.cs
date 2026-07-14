@@ -61,7 +61,10 @@ app.MapGet("/external/health", (IOptions<JsonPlaceholderOptions> options) =>
 // Interview tip: handlers should be async when calling I/O. Use `async` lambda or
 // return Task<IResult> from a named method.
 
-// TODO: Implement Exercise 1 here
+app.MapGet("/posts", async (IJsonPlaceholderClient client, CancellationToken cancellationToken) => {
+    var posts = await client.GetPostsAsync(cancellationToken);
+    return Results.Ok(posts);
+});
 
 
 // =============================================================================
@@ -79,7 +82,10 @@ app.MapGet("/external/health", (IOptions<JsonPlaceholderOptions> options) =>
 // Interview tip: map upstream status codes to your API contract. Do not leak raw
 // HttpRequestException messages to clients — log details, return ProblemDetails.
 
-// TODO: Implement Exercise 2 here
+app.MapGet("/posts/{id:int}", async (int id, IJsonPlaceholderClient client, CancellationToken cancellationToken) => {
+    var post = await client.GetPostByIdAsync(id, cancellationToken);
+    return post == null ? Results.NotFound() : Results.Ok(post);
+});
 
 
 // =============================================================================
@@ -102,8 +108,16 @@ app.MapGet("/external/health", (IOptions<JsonPlaceholderOptions> options) =>
 // Interview tip: set timeouts on HttpClient (client.Timeout) and propagate
 // CancellationToken on long-running upstream calls.
 
-// TODO: Implement Exercise 3 here
+app.MapPost("/posts", async (CreateExternalPostRequest request, IJsonPlaceholderClient client, CancellationToken cancellationToken) => {
+    if (string.IsNullOrWhiteSpace(request.Title))
+        return Results.BadRequest($"{nameof(request.Title)} is required.");
 
+    if (string.IsNullOrWhiteSpace(request.Body))
+        return Results.BadRequest($"{nameof(request.Body)} is required.");
+
+    var created = await client.CreatePostAsync(request, cancellationToken);
+    return Results.Created($"/posts/{created.Id}", created);
+});
 
 // =============================================================================
 // EXERCISE 4 — Query string filter via external API
@@ -120,7 +134,10 @@ app.MapGet("/external/health", (IOptions<JsonPlaceholderOptions> options) =>
 // Interview tip: prefer letting the external API filter when it supports query params
 // rather than fetching everything and filtering in memory.
 
-// TODO: Implement Exercise 4 here
+app.MapGet("/posts/user/{userId:int}", async (int userId, IJsonPlaceholderClient client, CancellationToken cancellationToken) => {
+    var posts = await client.GetPostsByUserIdAsync(userId, cancellationToken);
+    return Results.Ok(posts);
+});
 
 
 // =============================================================================
@@ -143,8 +160,19 @@ app.MapGet("/external/health", (IOptions<JsonPlaceholderOptions> options) =>
 //   - more concurrent load on upstream
 //   - use CancellationToken to cancel both when client disconnects
 
-// TODO: Implement Exercise 5 here
+app.MapGet("/posts/{id:int}/summary", async (int id, IJsonPlaceholderClient client, CancellationToken cancellationToken) => {
+    var postTask = client.GetPostByIdAsync(id, cancellationToken);
+    var countTask = client.GetCommentCountForPostAsync(id, cancellationToken);
+    await Task.WhenAll(postTask, countTask);
 
+    return postTask.Result == null ? 
+        Results.NotFound() : 
+        Results.Ok(new PostSummary(
+            postTask.Result.Id, 
+            postTask.Result.Title,
+            countTask.Result
+        ));
+});
 
 // =============================================================================
 // EXERCISE 6 — CancellationToken propagation
@@ -162,7 +190,14 @@ app.MapGet("/external/health", (IOptions<JsonPlaceholderOptions> options) =>
 // Interview tip: ASP.NET Core binds CancellationToken parameters from RequestAborted.
 // Always pass tokens through to HttpClient calls in production APIs.
 
-// TODO: Implement Exercise 6 here
+app.MapGet("/posts/cancellable", async (IJsonPlaceholderClient client, CancellationToken cancellationToken) => {
+    // add a timeout of 1 second
+    cancellationToken.ThrowIfCancellationRequested();
+    await Task.Delay(3000, cancellationToken);
+
+    var posts = await client.GetPostsAsync(cancellationToken);
+    return Results.Ok(posts);
+});
 
 
 app.Run();
