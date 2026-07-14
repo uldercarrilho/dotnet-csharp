@@ -1,4 +1,8 @@
+using Microsoft.AspNetCore.DataProtection.Repositories;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Options;
+using Polly;
 using Resilience.Models;
 using Resilience.Services;
 
@@ -50,13 +54,43 @@ builder.Services.AddSingleton<UpstreamSimulatorState>();
 
 // Typed HttpClient — no resilience handler yet (you add it in Exercises 4–6).
 // Interview tip: always use IHttpClientFactory (AddHttpClient) instead of `new HttpClient()`.
-builder.Services.AddHttpClient<IUpstreamQuoteClient, UpstreamQuoteClient>();
+builder.Services.AddHttpClient<IUpstreamQuoteClient, UpstreamQuoteClient>()
+    .AddResilienceHandler("retry-only", pipeline =>
+    {
+        pipeline.AddRetry(new HttpRetryStrategyOptions
+        {
+            MaxRetryAttempts = 3,
+            BackoffType = DelayBackoffType.Exponential,
+            UseJitter = true,
+        });
+
+        pipeline.AddCircuitBreaker(new HttpCircuitBreakerStrategyOptions
+        {
+           FailureRatio = 0.5,
+           MinimumThroughput = 3,
+           BreakDuration = TimeSpan.FromSeconds(10),
+           SamplingDuration = TimeSpan.FromSeconds(30),
+       });
+    });
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("enriched", limiter =>
+    {
+        limiter.Window = TimeSpan.FromSeconds(10);
+        limiter.PermitLimit = 5;
+        limiter.QueueLimit = 0;
+    });
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+});
+
 
 // TODO (Exercise 6): register rate limiting here with builder.Services.AddRateLimiter(...)
 
 var app = builder.Build();
 
 app.UseHttpsRedirection();
+app.UseRateLimiter();
 
 // TODO (Exercise 6): enable rate limiting middleware — app.UseRateLimiter();
 
@@ -109,7 +143,9 @@ app.MapGet("/resilience/health", (IOptions<ResilienceOptions> options) =>
 //
 // Interview tip: GET is safe and idempotent — multiple calls have no side effects.
 
-// TODO: Implement Exercise 1 here
+app.MapGet("/quotes", (IQuoteRepository repository) => {
+    return Results.Ok(repository.GetAll());
+});
 
 
 // =============================================================================
@@ -136,8 +172,21 @@ app.MapGet("/resilience/health", (IOptions<ResilienceOptions> options) =>
 //
 // Interview tip: 201 Created + Location header is the REST standard for resource creation.
 
-// TODO: Implement Exercise 2 here
+app.MapGet("/quotes/{id:int}", (int id, IQuoteRepository repository) => {
+    var quote = repository.GetById(id);
+    return quote is null ? Results.NotFound() : Results.Ok(quote);
+});
 
+app.MapPost("/quotes", (CreateQuoteRequest request, IQuoteRepository repository) => {
+    if (string.IsNullOrWhiteSpace(request.Text))
+        return Results.BadRequest($"{nameof(request.Text)} is required.");
+
+    if (string.IsNullOrWhiteSpace(request.Author))
+        return Results.BadRequest($"{nameof(request.Author)} is required.");
+
+    var quote = repository.Add(request);
+    return Results.Created($"/quotes/{quote.Id}", quote);
+});
 
 // =============================================================================
 // EXERCISE 3 — Enriched quote (upstream call WITHOUT resilience)
@@ -160,7 +209,25 @@ app.MapGet("/resilience/health", (IOptions<ResilienceOptions> options) =>
 // Interview tip: map upstream failures to your API contract. Log the exception;
 // return ProblemDetails (502/503) instead of leaking raw exception messages.
 
-// TODO: Implement Exercise 3 here
+app.MapGet("/quotes/{id:int}/enriched", async (int id, IQuoteRepository repository, IUpstreamQuoteClient upstream, CancellationToken cancellationToken) => {
+    var quote = repository.GetById(id);
+    if (quote is null)
+        return Results.NotFound();
+    
+    try
+    {
+        var metadata = await upstream.GetMetadataAsync(id, cancellationToken);
+        if (metadata is null)
+            return Results.Ok(quote);
+        
+        return Results.Ok(new EnrichedQuote(quote.Id, quote.Text, quote.Author, metadata.VerificationStatus, metadata.Rating));
+    }
+    catch (HttpRequestException ex)
+    {
+        return Results.Problem(statusCode: StatusCodes.Status502BadGateway, detail: ex.Message);        
+    }
+})
+.RequireRateLimiting("enriched");
 
 
 // =============================================================================
