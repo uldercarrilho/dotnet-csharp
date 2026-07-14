@@ -1,0 +1,31 @@
+@host = https://localhost:7199
+@hostHttp = http://localhost:5299
+
+### Reference — health check (works out of the box)
+GET {{hostHttp}}/resilience/health
+
+### Pre-built — reset upstream failure counter between resilience tests
+POST {{hostHttp}}/upstream/reset
+
+### Exercise 1 — list all quotes
+GET {{hostHttp}}/quotes
+
+### Exercise 2 — get by id
+GET {{hostHttp}}/quotes/1
+###
+GET {{hostHttp}}/quotes/999
+
+### Exercise 2 — create a quote
+POST {{hostHttp}}/quotes
+Content-Type: application/json
+
+{
+  "text": "Stay hungry, stay foolish.",
+  "author": "Steve Jobs"
+}
+
+### Exercise 3 — enriched quote (upstream may fail without resilience policies)
+GET {{hostHttp}}/quotes/1/enriched
+
+### Exercise 6 — throttling (send rapidly to trigger 429 after 5 requests in 10s)
+GET {{hostHttp}}/quotes/1/enriched

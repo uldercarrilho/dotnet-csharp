@@ -1,0 +1,176 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "Resilience",
+    "description": "Interview practice API for REST, retry, circuit breaker, and throttling.\n\nRun: `dotnet run --project src/Interview/Resilience`\n\nDefault base URL: http://localhost:5299",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "hostHttp",
+      "value": "http://localhost:5299"
+    },
+    {
+      "key": "host",
+      "value": "https://localhost:7199"
+    }
+  ],
+  "item": [
+    {
+      "name": "Reference",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{hostHttp}}/resilience/health",
+              "host": ["{{hostHttp}}"],
+              "path": ["resilience", "health"]
+            },
+            "description": "Health check — works out of the box."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pre-built",
+      "item": [
+        {
+          "name": "Reset upstream failure counter",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{hostHttp}}/upstream/reset",
+              "host": ["{{hostHttp}}"],
+              "path": ["upstream", "reset"]
+            },
+            "description": "Reset the upstream failure counter between resilience tests."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exercise 1 — List quotes",
+      "item": [
+        {
+          "name": "List all quotes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{hostHttp}}/quotes",
+              "host": ["{{hostHttp}}"],
+              "path": ["quotes"]
+            },
+            "description": "GET /quotes returns every quote from IQuoteRepository with status 200."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exercise 2 — Get by id and create",
+      "item": [
+        {
+          "name": "Get quote by id (exists)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{hostHttp}}/quotes/1",
+              "host": ["{{hostHttp}}"],
+              "path": ["quotes", "1"]
+            },
+            "description": "GET /quotes/{id} → 200 with quote."
+          },
+          "response": []
+        },
+        {
+          "name": "Get quote by id (not found)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{hostHttp}}/quotes/999",
+              "host": ["{{hostHttp}}"],
+              "path": ["quotes", "999"]
+            },
+            "description": "GET /quotes/{id} → 404 if missing."
+          },
+          "response": []
+        },
+        {
+          "name": "Create a quote",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Stay hungry, stay foolish.\",\n  \"author\": \"Steve Jobs\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{hostHttp}}/quotes",
+              "host": ["{{hostHttp}}"],
+              "path": ["quotes"]
+            },
+            "description": "POST /quotes → 201 Created with Location header."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exercise 3 — Enriched quote",
+      "item": [
+        {
+          "name": "Get enriched quote",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{hostHttp}}/quotes/1/enriched",
+              "host": ["{{hostHttp}}"],
+              "path": ["quotes", "1", "enriched"]
+            },
+            "description": "Merges local quote + upstream metadata. Upstream may fail without resilience policies (502/503)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exercise 6 — Throttling",
+      "item": [
+        {
+          "name": "Get enriched quote (rate limit test)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{hostHttp}}/quotes/1/enriched",
+              "host": ["{{hostHttp}}"],
+              "path": ["quotes", "1", "enriched"]
+            },
+            "description": "Send rapidly (6+ requests in 10s) to trigger 429 Too Many Requests after Exercise 6 is implemented."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
