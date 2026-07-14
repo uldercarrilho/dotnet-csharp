@@ -1,6 +1,6 @@
-using CreateEndpointsProject.Models;
+using CreateEndpoints.Models;
 
-namespace CreateEndpointsProject.Services;
+namespace CreateEndpoints.Services;
 
 // In-memory implementation — fine for interviews and local practice.
 // You do not need to implement this; focus on the endpoints in Program.cs and BooksController.cs.

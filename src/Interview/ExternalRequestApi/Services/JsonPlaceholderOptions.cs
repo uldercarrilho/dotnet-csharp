@@ -1,4 +1,4 @@
-namespace ExternalRequestApiProject.Services;
+namespace ExternalRequestApi.Services;
 
 public class JsonPlaceholderOptions
 {

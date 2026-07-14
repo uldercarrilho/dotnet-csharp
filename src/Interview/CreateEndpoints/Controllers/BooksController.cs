@@ -1,8 +1,8 @@
-using CreateEndpointsProject.Models;
-using CreateEndpointsProject.Services;
+using CreateEndpoints.Models;
+using CreateEndpoints.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CreateEndpointsProject.Controllers;
+namespace CreateEndpoints.Controllers;
 
 // =============================================================================
 // EXERCISE 7 — Controller-based endpoints (alternative to Minimal APIs)

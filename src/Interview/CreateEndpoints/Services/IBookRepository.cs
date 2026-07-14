@@ -1,6 +1,6 @@
-using CreateEndpointsProject.Models;
+using CreateEndpoints.Models;
 
-namespace CreateEndpointsProject.Services;
+namespace CreateEndpoints.Services;
 
 // Repository abstraction — endpoints depend on this interface, not the concrete store.
 // Interview tip: mention dependency injection (DI). Register IBookRepository in Program.cs

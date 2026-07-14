@@ -1,4 +1,4 @@
-namespace CreateEndpointsProject.Models;
+namespace CreateEndpoints.Models;
 
 // Request DTO (Data Transfer Object) — what the client sends when creating a resource.
 // Interview tip: use a dedicated type for input so you can validate it without polluting the domain model.

@@ -1,6 +1,6 @@
-using ExternalRequestApiProject.Models;
+using ExternalRequestApi.Models;
 
-namespace ExternalRequestApiProject.Services;
+namespace ExternalRequestApi.Services;
 
 // Typed HTTP client abstraction — your endpoints depend on this, not HttpClient directly.
 // Interview tip: IHttpClientFactory + typed clients avoid socket exhaustion from new HttpClient()

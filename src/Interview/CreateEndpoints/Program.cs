@@ -1,13 +1,13 @@
-using CreateEndpointsProject.Models;
-using CreateEndpointsProject.Services;
+using CreateEndpoints.Models;
+using CreateEndpoints.Services;
 using Microsoft.VisualBasic;
 
 // =============================================================================
 // CREATE ENDPOINTS — Interview practice scaffold
 // =============================================================================
 //
-// Run:  dotnet run --project src/CreateEndpoints/CreateEndpointsProject
-// Test: use CreateEndpointsProject.http in your IDE, or curl/Postman
+// Run:  dotnet run --project src/Interview/CreateEndpoints
+// Test: use CreateEndpoints.http in your IDE, or curl/Postman
 //
 // REST cheat sheet (memorize for interviews):
 //   GET    /resources      → list        → 200 OK

@@ -1,4 +1,4 @@
-namespace CreateEndpointsProject.Models;
+namespace CreateEndpoints.Models;
 
 // Domain model — the shape of data your API works with internally.
 // Interview tip: keep domain models separate from request/response DTOs when validation or

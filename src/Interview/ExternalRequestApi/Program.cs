@@ -1,13 +1,13 @@
-using ExternalRequestApiProject.Models;
-using ExternalRequestApiProject.Services;
+using ExternalRequestApi.Models;
+using ExternalRequestApi.Services;
 using Microsoft.Extensions.Options;
 
 // =============================================================================
 // EXTERNAL REQUEST API — Interview practice scaffold
 // =============================================================================
 //
-// Run:  dotnet run --project src/ExternalRequestApi/ExternalRequestApiProject
-// Test: use ExternalRequestApiProject.http in your IDE, or curl/Postman
+// Run:  dotnet run --project src/Interview/ExternalRequestApi
+// Test: use ExternalRequestApi.http in your IDE, or curl/Postman
 //
 // This app exposes YOUR endpoints that call an EXTERNAL API (JSONPlaceholder).
 // The typed client in Services/ is pre-built — you wire up minimal API routes here.

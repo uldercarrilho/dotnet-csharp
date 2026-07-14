@@ -1,9 +1,9 @@
 using System.Net;
 using System.Net.Http.Json;
-using ExternalRequestApiProject.Models;
+using ExternalRequestApi.Models;
 using Microsoft.Extensions.Options;
 
-namespace ExternalRequestApiProject.Services;
+namespace ExternalRequestApi.Services;
 
 // Pre-built typed client — calls https://jsonplaceholder.typicode.com (free fake REST API).
 // Focus your practice on the minimal API endpoints in Program.cs, not this class.

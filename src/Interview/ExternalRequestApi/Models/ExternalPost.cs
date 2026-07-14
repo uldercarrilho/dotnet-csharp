@@ -1,4 +1,4 @@
-namespace ExternalRequestApiProject.Models;
+namespace ExternalRequestApi.Models;
 
 // DTO matching JSONPlaceholder /posts — maps directly from external JSON.
 // Interview tip: keep external API shapes separate from your domain models when they differ.
