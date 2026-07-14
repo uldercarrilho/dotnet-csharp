@@ -14,17 +14,20 @@
 
 #pragma warning disable CS8321 // Exercise stubs; uncomment calls in Main as you implement them.
 
+using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
+
 Console.WriteLine("=== AsyncAwait practice scaffold ===\n");
 
 await ReferenceExampleAsync();
 
 // Uncomment as you implement each exercise:
-// await Exercise1_BasicAsyncTryCatchAsync();
-// await Exercise2_AwaitVsBlockingAsync();
-// await Exercise3_WalkInnerExceptionChainAsync();
-// await Exercise4_WrapWithMeaningfulMessageAsync();
-// await Exercise5_TaskWhenAllMultipleFailuresAsync();
-// await Exercise6_PreserveStackTraceOnRethrowAsync();
+await Exercise1_BasicAsyncTryCatchAsync();
+await Exercise2_AwaitVsBlockingAsync();
+await Exercise3_WalkInnerExceptionChainAsync();
+await Exercise4_WrapWithMeaningfulMessageAsync();
+await Exercise5_TaskWhenAllMultipleFailuresAsync();
+await Exercise6_PreserveStackTraceOnRethrowAsync();
 
 Console.WriteLine("\nDone. Implement the TODO exercises and uncomment their calls above.");
 
@@ -76,12 +79,15 @@ static async Task SimulateRemoteCallAsync(bool shouldFail)
 // Interview tip: Prefer catching specific exception types when you can handle them;
 // catch (Exception) is acceptable at app boundaries (logging, middleware).
 
-static Task Exercise1_BasicAsyncTryCatchAsync()
+static async Task Exercise1_BasicAsyncTryCatchAsync()
 {
     Console.WriteLine("--- EXERCISE 1 ---");
 
-    // TODO: Implement Exercise 1 here
-    throw new NotImplementedException("Implement Exercise 1 — basic async try/catch");
+    try {
+        await SimulateRemoteCallAsync(shouldFail: true);
+    } catch (Exception ex) {
+        Console.WriteLine(ex.Message);
+    }
 }
 
 // =============================================================================
@@ -102,13 +108,33 @@ static Task Exercise1_BasicAsyncTryCatchAsync()
 // Interview tip: Never use .Wait() or .Result on async code in ASP.NET — it can cause
 // deadlocks (capture of sync context) and hides the real exception type.
 
-static Task Exercise2_AwaitVsBlockingAsync()
+static async Task Exercise2_AwaitVsBlockingAsync()
 {
     Console.WriteLine("--- EXERCISE 2 ---");
 
-    // TODO: Implement Exercise 2 here
-    throw new NotImplementedException("Implement Exercise 2 — await vs .Wait()");
+    try
+    {
+        await FailingTaskAsync();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.GetType() + " " + ex.Message);
+    }
+
+    try
+    {
+        FailingTaskAsync().Wait();
+    }
+    catch (AggregateException ex)
+    {
+        Console.WriteLine(ex.GetType() + " " + ex.InnerException?.Message);
+    }
 }
+
+#pragma warning disable CS1998
+static async Task FailingTaskAsync()
+    => throw new ArgumentException("Leaf failure");
+#pragma warning restore CS1998
 
 // =============================================================================
 // EXERCISE 3 — Walk the InnerException chain
@@ -133,8 +159,20 @@ static Task Exercise3_WalkInnerExceptionChainAsync()
 {
     Console.WriteLine("--- EXERCISE 3 ---");
 
-    // TODO: Implement Exercise 3 here
-    throw new NotImplementedException("Implement Exercise 3 — walk InnerException chain");
+    var ex = new ApplicationException("outer",
+                new InvalidOperationException("middle",
+                    new ArgumentException("root")));
+    PrintExceptionChain(ex);
+
+    return Task.CompletedTask;
+}
+
+static void PrintExceptionChain(Exception? ex)
+{
+    while (ex is not null) {
+        Console.WriteLine(ex.GetType() + " " + ex.Message);
+        ex = ex.InnerException;
+    }
 }
 
 // =============================================================================
@@ -156,12 +194,32 @@ static Task Exercise3_WalkInnerExceptionChainAsync()
 // Interview tip: Always pass the original exception as inner when wrapping — it keeps
 // the stack trace and root cause for diagnostics.
 
-static Task Exercise4_WrapWithMeaningfulMessageAsync()
+static async Task Exercise4_WrapWithMeaningfulMessageAsync()
 {
     Console.WriteLine("--- EXERCISE 4 ---");
 
-    // TODO: Implement Exercise 4 here (include ParseUserIdAsync helper)
-    throw new NotImplementedException("Implement Exercise 4 — wrap with InnerException");
+    try
+    {
+        await ParseUserIdAsync("abc");    
+    }
+    catch (Exception ex)
+    {
+        PrintExceptionChain(ex);
+    }
+    
+}
+
+static async Task<int> ParseUserIdAsync(string raw)
+{
+    await Task.Delay(10);
+    try
+    {
+        return int.Parse(raw);
+    }
+    catch (Exception caught)
+    {
+        throw new ArgumentException($"Invalid user id: '{raw}'", nameof(raw), innerException: caught);        
+    }
 }
 
 // =============================================================================
@@ -181,13 +239,51 @@ static Task Exercise4_WrapWithMeaningfulMessageAsync()
 // fan-out where you need every failure, consider Task.WhenAll + per-task try/catch,
 // or catch and inspect if you must block (rare).
 
-static Task Exercise5_TaskWhenAllMultipleFailuresAsync()
+static async Task Exercise5_TaskWhenAllMultipleFailuresAsync()
 {
     Console.WriteLine("--- EXERCISE 5 ---");
 
-    // TODO: Implement Exercise 5 here
-    throw new NotImplementedException("Implement Exercise 5 — Task.WhenAll failures");
+    var tasksForAwait = new Task[]
+    {
+        DelayThenThrowAsync(30, new InvalidOperationException("failure 1")),
+        DelayThenThrowAsync(20, new ArgumentException("failure 2")),
+        DelayThenThrowAsync(10, new ApplicationException("failure 3")),
+    };
+
+    try
+    {
+        await Task.WhenAll(tasksForAwait);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"await path (first fault only): {ex.GetType().Name} — {ex.Message}");
+    }
+
+    var tasksForWait = new Task[]
+    {
+        DelayThenThrowAsync(30, new InvalidOperationException("failure 1")),
+        DelayThenThrowAsync(20, new ArgumentException("failure 2")),
+        DelayThenThrowAsync(10, new ApplicationException("failure 3")),
+    };
+
+    try
+    {
+        Task.WhenAll(tasksForWait).Wait();
+    }
+    catch (AggregateException aggEx)
+    {
+        Console.WriteLine("Wait() path — all failures via Flatten():");
+        foreach (var inner in aggEx.Flatten().InnerExceptions)
+            Console.WriteLine($"  {inner.GetType().Name} — {inner.Message}");
+    }
 }
+
+static async Task DelayThenThrowAsync(int delayMs, Exception ex)
+{
+    await Task.Delay(delayMs);
+    throw ex;
+}
+
 
 // =============================================================================
 // EXERCISE 6 — Preserve stack trace when rethrowing
@@ -208,10 +304,60 @@ static Task Exercise5_TaskWhenAllMultipleFailuresAsync()
 // Interview tip: In async code, `throw;` and ExceptionDispatchInfo.Capture(ex).Throw()
 // preserve stack traces. Never `throw ex;` unless you intentionally reset the stack.
 
-static Task Exercise6_PreserveStackTraceOnRethrowAsync()
+static async Task Exercise6_PreserveStackTraceOnRethrowAsync()
 {
     Console.WriteLine("--- EXERCISE 6 ---");
 
-    // TODO: Implement Exercise 6 here
-    throw new NotImplementedException("Implement Exercise 6 — throw vs throw ex");
+    Console.WriteLine("GOOD — throw; preserves original stack:");
+    try
+    {
+        await MiddleLayerGoodRethrowAsync();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.StackTrace);
+    }
+
+    Console.WriteLine();
+    Console.WriteLine("BAD — throw ex; resets stack trace:");
+    try
+    {
+        await MiddleLayerBadRethrowAsync();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.StackTrace);
+    }
+}
+
+static async Task ThrowFromDeepAsync()
+{
+    await Task.Delay(10);
+    throw new InvalidOperationException("Deep failure");
+}
+
+static async Task MiddleLayerGoodRethrowAsync()
+{
+    try
+    {
+        await ThrowFromDeepAsync();
+    }
+    catch (Exception)
+    {
+        Console.WriteLine("logged");
+        throw;
+    }
+}
+
+static async Task MiddleLayerBadRethrowAsync()
+{
+    try
+    {
+        await ThrowFromDeepAsync();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("logged");
+        throw ex;
+    }
 }
