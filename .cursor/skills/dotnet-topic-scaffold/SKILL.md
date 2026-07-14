@@ -9,12 +9,12 @@ description: >-
 
 # dotnet-csharp Topic Scaffold
 
-Create a new practice project under `src/` when the user names a topic. The user fills in TODOs; you supply structure, comments, and interview tips.
+Create a new practice project under **`src/Interview/`** when the user names a topic. The user fills in TODOs; you supply structure, comments, and interview tips.
 
 ## Before creating anything
 
 1. **Read the topic** from the user's message. If missing, ask: *"What topic should this practice project cover?"*
-2. **Check for collisions**: `Glob` `src/{TopicName}/` — do not overwrite an existing topic without explicit confirmation.
+2. **Check for collisions**: `Glob` `src/Interview/{TopicName}/` — do not overwrite an existing topic without explicit confirmation.
 3. **Pick a scaffold type** (see table below). If unclear, default to **interview practice** when the user mentions interviews, exercises, or endpoints; otherwise **educational console**.
 
 | Signal in topic | Scaffold type | Template |
@@ -24,29 +24,39 @@ Create a new practice project under `src/` when the user names a topic. The user
 | broad area with subtopics (e.g. statements, generics) | Multi-file educational | [reference.md — Multi-file](reference.md#multi-file-educational) |
 | default / language concept | Single-file educational console | [reference.md — Console](reference.md#single-file-educational-console) |
 
-4. **Read one nearby example** in `src/` that matches the chosen type (e.g. `src/CreateEndpoints/` for Web API, `src/Arrays/` for console).
+4. **Read one nearby example** that matches the chosen type (e.g. `src/Interview/CreateEndpoints/` for Web API, `src/Interview/AsyncAwait/` for console practice, `src/Arrays/` for educational style).
 
 ## Naming and layout
 
+All new scaffolds live under the shared **`src/Interview/`** folder and are registered in **`src/Interview/Interview.sln`**.
+
 ```
-src/{TopicFolder}/
-├── {TopicFolder}.sln
-└── {TopicFolder}Project/
-    ├── {TopicFolder}Project.csproj
-    ├── Program.cs
-    └── (optional) Models/, Services/, Controllers/, *.http
+src/Interview/
+├── Interview.sln              # shared solution — add every new project here
+├── CreateEndpoints/
+│   ├── CreateEndpoints.csproj
+│   ├── Program.cs
+│   └── (optional) Models/, Services/, Controllers/, *.http
+├── AsyncAwait/
+│   ├── AsyncAwait.csproj
+│   └── Program.cs
+└── {TopicFolder}/
+    ├── {TopicFolder}.csproj
+    └── ...
 ```
 
 | User says | TopicFolder | Project / namespace |
 |-----------|-------------|---------------------|
-| "create endpoints" | `CreateEndpoints` | `CreateEndpointsProject` |
-| "LINQ" | `Linq` | `LinqProject` |
-| "dependency injection" | `DependencyInjection` | `DependencyInjectionProject` |
+| "create endpoints" | `CreateEndpoints` | `CreateEndpoints` |
+| "async / await" | `AsyncAwait` | `AsyncAwait` |
+| "dependency injection" | `DependencyInjection` | `DependencyInjection` |
 
 Rules:
-- PascalCase folder and solution names; no spaces.
-- Project folder always `{TopicFolder}Project`; namespace matches.
-- Generate a new GUID for each `.sln` project entry (`[System.Guid]::NewGuid()` or equivalent).
+- PascalCase folder and project names; no spaces.
+- Project folder is **`src/Interview/{TopicFolder}/`** with **`{TopicFolder}.csproj`** (no `{TopicFolder}Project` subfolder).
+- Namespace matches the project name (e.g. `CreateEndpoints`, `AsyncAwait`).
+- **Do not** create a standalone `{TopicFolder}.sln` — add the project to `Interview.sln` instead.
+- Generate a new GUID when manually editing the `.sln`, or use `dotnet sln add`.
 
 ## Target framework
 
@@ -62,7 +72,7 @@ Do not downgrade existing topics to `netcoreapp3.1` unless the user asks.
 
 Every scaffold must include:
 
-1. **Header comment block** in `Program.cs` (or main file): topic title, how to run (`dotnet run --project src/...`), and what the user will learn.
+1. **Header comment block** in `Program.cs` (or main file): topic title, how to run (`dotnet run --project src/Interview/...`), and what the user will learn.
 2. **Educational comments** explaining concepts (concise, interview-oriented when practice type).
 3. **At least one working reference** snippet or endpoint the user can run immediately.
 4. **Progressive exercises** for practice scaffolds: numbered `EXERCISE N` sections with `TODO` and step-by-step hints.
@@ -79,21 +89,25 @@ Copy this checklist and track progress:
 
 ```
 - [ ] 1. Resolve topic name and scaffold type
-- [ ] 2. Create directory structure and .sln / .csproj
-- [ ] 3. Add Program.cs (and supporting files if needed)
-- [ ] 4. Add .http test file for Web API scaffolds
-- [ ] 5. dotnet build — fix errors before finishing
-- [ ] 6. Summarize for user: path, how to run, exercise list
+- [ ] 2. Create src/Interview/{TopicFolder}/ and .csproj
+- [ ] 3. Add project to src/Interview/Interview.sln
+- [ ] 4. Add Program.cs (and supporting files if needed)
+- [ ] 5. Add .http test file for Web API scaffolds
+- [ ] 6. dotnet build src/Interview/Interview.sln — fix errors before finishing
+- [ ] 7. Summarize for user: path, how to run, exercise list
 ```
 
 ### Step 1 — Scaffold with CLI when appropriate
 
 ```bash
 # Console
-dotnet new console -n {TopicFolder}Project -o src/{TopicFolder}/{TopicFolder}Project -f net8.0
+dotnet new console -n {TopicFolder} -o src/Interview/{TopicFolder} -f net8.0
 
 # Web API (minimal APIs, no OpenAPI template noise)
-dotnet new webapi -n {TopicFolder}Project -o src/{TopicFolder}/{TopicFolder}Project --use-minimal-apis --no-openapi -f net8.0
+dotnet new webapi -n {TopicFolder} -o src/Interview/{TopicFolder} --use-minimal-apis --no-openapi -f net8.0
+
+# Register in the shared solution
+dotnet sln src/Interview/Interview.sln add src/Interview/{TopicFolder}/{TopicFolder}.csproj
 ```
 
 Then replace generated boilerplate with the repo's commented, exercise-driven style.
@@ -106,7 +120,7 @@ Use this structure in `Program.cs`:
 // =============================================================================
 // {TOPIC} — Interview practice scaffold
 // =============================================================================
-// Run: dotnet run --project src/{TopicFolder}/{TopicFolder}Project
+// Run: dotnet run --project src/Interview/{TopicFolder}
 
 // REFERENCE — working example (leave runnable)
 // ...
@@ -122,18 +136,18 @@ For Web API topics, pre-implement **repository/service layer** so the user only 
 ### Step 3 — Verify
 
 ```bash
-dotnet build src/{TopicFolder}/{TopicFolder}.sln
+dotnet build src/Interview/Interview.sln
 ```
 
 Build must succeed. The only failing behavior at runtime should be intentional `TODO` / `NotImplementedException` on exercises not yet implemented.
 
 ### Step 4 — Commit and push
 
-Only when the user explicitly asks. Use Conventional Commits, e.g. `feat({scope}): add scaffold project for {topic} practice`.
+Only when the user explicitly asks. Use Conventional Commits, e.g. `feat(interview): add scaffold project for {topic} practice`.
 
 ## Quality bar
 
-- Match tone and comment density of `src/Arrays/ArraysProject/Program.cs` (educational) or `src/CreateEndpoints/CreateEndpointsProject/Program.cs` (interview practice).
+- Match tone and comment density of `src/Arrays/ArraysProject/Program.cs` (educational) or `src/Interview/CreateEndpoints/Program.cs` (interview practice).
 - Minimal scope: no unrelated refactors elsewhere in the repo.
 - Prefer records, file-scoped namespaces, and implicit usings on `net8.0` new projects.
 - Keep exercises focused on the stated topic — do not bundle unrelated concepts.
