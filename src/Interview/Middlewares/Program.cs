@@ -1,3 +1,4 @@
+using System.Net;
 using Middlewares.Middleware;
 using Middlewares.Services;
 
@@ -51,7 +52,10 @@ app.UseRequestTiming();
 // Interview tip: inline middleware is fine for tiny cross-cutting concerns; extract a class
 // when you need DI, unit tests, or multiple middleware in one file.
 
-// TODO: Implement Exercise 1 here
+app.Use(async (HttpContext context, RequestDelegate next) => {
+    Console.WriteLine($"Method: {context.Request.Method} | Path: {context.Request.Path}");
+    await next(context);
+});
 
 
 // =============================================================================
@@ -68,27 +72,7 @@ app.UseRequestTiming();
 // Interview tip: UseMiddleware<T> resolves T from DI per request. Only RequestDelegate is
 // required in the constructor unless you inject other services.
 
-// TODO: Register Exercise 2 here — app.UseMiddleware<RequestLoggingMiddleware>();
-
-
-// =============================================================================
-// EXERCISE 3 — Short-circuit (API key gate)
-// =============================================================================
-// Goal: Reject requests to /notes/* (except /notes/health) when header X-Api-Key is missing.
-//
-// Steps:
-//   1. app.Use(async (context, next) => { ... })
-//   2. If path starts with "/notes" but is NOT "/notes/health":
-//        - if X-Api-Key header is missing → set StatusCode 401, write body, return (do NOT call next)
-//   3. Otherwise await next(context)
-//
-// Test:
-//   GET /notes           → 401 without header, 200 with header X-Api-Key: dev-key
-//   GET /notes/health    → 200 without header (health stays public)
-//
-// Interview tip: authentication middleware often short-circuits; authorization runs after auth.
-
-// TODO: Implement Exercise 3 here
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 
 // =============================================================================
@@ -107,7 +91,18 @@ app.UseRequestTiming();
 // Interview tip: production apps use app.UseExceptionHandler() or IExceptionHandler (.NET 8+).
 // Custom middleware teaches the pattern; mention both in interviews.
 
-// TODO: Implement Exercise 4 here (register near the top of the pipeline when done)
+app.Use(async (context, next) => {
+    try
+    {
+        await next(context);
+    }
+    catch (Exception ex)
+    {
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        context.Response.ContentType = "application/problem+json";
+        await context.Response.WriteAsJsonAsync(new { title = "Internal Server Error", detail = ex.Message });
+    }
+});
 
 
 // =============================================================================
@@ -127,7 +122,46 @@ app.UseRequestTiming();
 // Interview tip: Exception handling and HTTPS redirection are middleware too — know where they
 // sit relative to your custom components (exception handler should be outermost).
 
-// TODO: Implement Exercise 5 here
+app.Use(async (context, next) => {
+    context.Response.Headers["X-Pipeline-Order"] += "B";
+    await next(context);
+});
+
+app.Use(async (context, next) => {
+    context.Response.Headers["X-Pipeline-Order"] += "A";
+    await next(context);
+});
+
+// =============================================================================
+// EXERCISE 3 — Short-circuit (API key gate)
+// =============================================================================
+// Goal: Reject requests to /notes/* (except /notes/health) when header X-Api-Key is missing.
+//
+// Steps:
+//   1. app.Use(async (context, next) => { ... })
+//   2. If path starts with "/notes" but is NOT "/notes/health":
+//        - if X-Api-Key header is missing → set StatusCode 401, write body, return (do NOT call next)
+//   3. Otherwise await next(context)
+//
+// Test:
+//   GET /notes           → 401 without header, 200 with header X-Api-Key: dev-key
+//   GET /notes/health    → 200 without header (health stays public)
+//
+// Interview tip: authentication middleware often short-circuits; authorization runs after auth.
+
+app.Use(async (context, next) => {
+    if (context.Request.Path.StartsWithSegments("/notes") &&
+        !context.Request.Path.StartsWithSegments("/notes/health") &&
+        !context.Request.Headers.ContainsKey("X-Api-Key"))
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        context.Response.ContentType = "text/plain";
+        await context.Response.WriteAsync("Unauthorized: X-Api-Key header is required.");
+        return;
+    }
+
+    await next(context);
+});
 
 
 // -----------------------------------------------------------------------------

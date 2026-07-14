@@ -17,6 +17,8 @@ public class RequestLoggingMiddleware
     public async Task InvokeAsync(HttpContext context)
     {
         // TODO: log the incoming request (method + path), call _next, then log status code.
+        Console.WriteLine($"Request: {context.Request.Method} {context.Request.Path}");
         await _next(context);
+        Console.WriteLine($"Status code: {context.Response.StatusCode}");
     }
 }

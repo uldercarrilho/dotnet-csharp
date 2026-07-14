@@ -1,0 +1,210 @@
+{
+  "info": {
+    "name": "Middlewares",
+    "description": "Interview practice API — ASP.NET Core middleware pipeline.\n\nRun: `dotnet run --project src/Interview/Middlewares`\n\nCollection variables:\n- `host` — HTTPS (default https://localhost:7029)\n- `hostHttp` — HTTP (default http://localhost:5084)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "host",
+      "value": "https://localhost:7029",
+      "type": "string"
+    },
+    {
+      "key": "hostHttp",
+      "value": "http://localhost:5084",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Reference",
+      "item": [
+        {
+          "name": "Health check (inspect X-Response-Time-Ms header)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/notes/health",
+              "host": ["{{host}}"],
+              "path": ["notes", "health"]
+            },
+            "description": "Reference — health (works out of the box; check X-Response-Time-Ms header)"
+          },
+          "response": []
+        },
+        {
+          "name": "List notes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/notes",
+              "host": ["{{host}}"],
+              "path": ["notes"]
+            },
+            "description": "Reference — list notes"
+          },
+          "response": []
+        },
+        {
+          "name": "Get note by id (existing)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/notes/1",
+              "host": ["{{host}}"],
+              "path": ["notes", "1"]
+            },
+            "description": "Reference — get one note (expect 200)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get note by id (not found)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/notes/999",
+              "host": ["{{host}}"],
+              "path": ["notes", "999"]
+            },
+            "description": "Reference — get one note (expect 404)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exercise 1",
+      "item": [
+        {
+          "name": "Inline logging (watch the console)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/notes",
+              "host": ["{{host}}"],
+              "path": ["notes"]
+            },
+            "description": "Exercise 1 — inline logging (watch the console)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exercise 2",
+      "item": [
+        {
+          "name": "Class-based logging (watch the console)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/notes/2",
+              "host": ["{{host}}"],
+              "path": ["notes", "2"]
+            },
+            "description": "Exercise 2 — class-based logging (watch the console)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exercise 3",
+      "item": [
+        {
+          "name": "API key gate — no key (expect 401)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/notes",
+              "host": ["{{host}}"],
+              "path": ["notes"]
+            },
+            "description": "Exercise 3 — API key gate (401 without key)"
+          },
+          "response": []
+        },
+        {
+          "name": "API key gate — with key (expect 200)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Api-Key",
+                "value": "dev-key"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/notes",
+              "host": ["{{host}}"],
+              "path": ["notes"]
+            },
+            "description": "Exercise 3 — API key gate (200 with X-Api-Key: dev-key)"
+          },
+          "response": []
+        },
+        {
+          "name": "Health stays public (no key required)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/notes/health",
+              "host": ["{{host}}"],
+              "path": ["notes", "health"]
+            },
+            "description": "Exercise 3 — /notes/health should work without API key"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exercise 4",
+      "item": [
+        {
+          "name": "Exception handling (expect 500 problem JSON)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/notes/boom",
+              "host": ["{{host}}"],
+              "path": ["notes", "boom"]
+            },
+            "description": "Exercise 4 — exception handling (should return 500 problem JSON)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exercise 5",
+      "item": [
+        {
+          "name": "Pipeline ordering (inspect X-Pipeline-Order header)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/notes/health",
+              "host": ["{{host}}"],
+              "path": ["notes", "health"]
+            },
+            "description": "Exercise 5 — pipeline ordering (inspect X-Pipeline-Order header)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
