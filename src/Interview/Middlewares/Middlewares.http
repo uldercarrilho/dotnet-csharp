@@ -1,0 +1,33 @@
+@host = https://localhost:7029
+@hostHttp = http://localhost:5084
+
+### Reference — health (works out of the box; check X-Response-Time-Ms header)
+GET {{host}}/notes/health
+
+### Reference — list notes
+GET {{host}}/notes
+
+### Reference — get one note
+GET {{host}}/notes/1
+###
+GET {{host}}/notes/999
+
+### Exercise 1 — inline logging (watch the console)
+GET {{host}}/notes
+
+### Exercise 2 — class-based logging (watch the console)
+GET {{host}}/notes/2
+
+### Exercise 3 — API key gate (401 without key)
+GET {{host}}/notes
+###
+GET {{host}}/notes
+X-Api-Key: dev-key
+###
+GET {{host}}/notes/health
+
+### Exercise 4 — exception handling (should return 500 problem JSON)
+GET {{host}}/notes/boom
+
+### Exercise 5 — pipeline ordering (inspect X-Pipeline-Order header)
+GET {{host}}/notes/health
